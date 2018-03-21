@@ -82,14 +82,8 @@
      * for loading have in fact been properly loaded.
      */
     function isReady() {
-        var ready = true;
-        for(var k in resourceCache) {
-            if(resourceCache.hasOwnProperty(k) &&
-               !resourceCache[k]) {
-                ready = false;
-            }
-        }
-        return ready;
+        return Object.keys(resourceCache)
+            .every(k => resourceCache.hasOwnProperty(k) && resourceCache[k]);
     }
 
     /* This function will add a function to the callback stack that is called
