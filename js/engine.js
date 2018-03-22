@@ -90,19 +90,14 @@ const Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
+        allEnemies.forEach(enemy => enemy.update(dt));
         player.update();
     }
 
-    /* This function initially draws the "game level", it will then call
-     * the renderEntities function. Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
+    /*
+     * This function initially draws the "game level"
      */
-    function render() {
+    function renderScenario() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
@@ -120,7 +115,7 @@ const Engine = (function(global) {
         let col;
         
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -138,7 +133,16 @@ const Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
+    }
 
+    /* It will call renderScenario the renderEntities function.
+     * Remember, this function is called every
+     * game tick (or loop of the game engine) because that's how games work -
+     * they are flipbooks creating the illusion of animation but in reality
+     * they are just drawing the entire screen over and over.
+     */
+    function render() {
+        renderScenario();
         renderEntities();
     }
 
@@ -150,9 +154,7 @@ const Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
+        allEnemies.forEach(enemy => enemy.render());
 
         player.render();
     }

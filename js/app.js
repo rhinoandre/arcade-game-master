@@ -1,7 +1,9 @@
 // Enemies our player must avoid
-var Enemy = function() {
-    this.x = 0;
-    this.y = 50;
+var Enemy = function(y) {
+    const bugSize = 171;
+    this.x = ~bugSize; //~ operator do (n+1)*-1
+    this.y = y;
+    this.speed = newSpeed();
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -9,13 +11,25 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 };
-
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x += this.speed * dt;
+    if (isBugReachFinal(this.x)) {
+        this.x = -170;
+        this.speed = newSpeed();
+    }
+
+    function newSpeed() {
+        return Math.random() * 200 + 100;
+    }
+    
+    function isBugReachFinal(x) {
+        return x > 505
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -32,10 +46,8 @@ const Player = function() {
     this.y = 300;
     this.sprite = 'images/char-horn-girl.png';
 }
-
-Player.prototype.update = function(deltaTime) {
-    
-}
+// I actually don't have a clu what this method is for
+Player.prototype.update = function() {}
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -45,7 +57,6 @@ Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'up':
             this.y -= 80;
-            console.log(this.y)
             break;
         case 'down':
             this.y += 80;
@@ -60,7 +71,14 @@ Player.prototype.handleInput = function(key) {
 }
 
 const player = new Player();
-const allEnemies = [new Enemy()];
+const allEnemies = [
+    new Enemy(60),
+    new Enemy(60),
+    new Enemy(143),
+    new Enemy(143),
+    new Enemy(225),
+    new Enemy(225)
+];
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
