@@ -92,13 +92,14 @@
         allEnemies.forEach(enemy => enemy.update(dt));
         player.update();
     }
+
     /*
     * This is called by the update function and loops through all
     * objects and check if they are have the same coordinates.
     * If so it means they have colide so the player should lose a life
     * and be reseted
     */
-    let width = 100;
+    let width = 80;
     function checkCollisions() {
         const playerX = player.x;
         const playerArea = playerX + width;

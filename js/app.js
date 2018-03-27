@@ -62,24 +62,17 @@ Player.prototype.render = function() {
 }
 
 Player.prototype.handleInput = function(key) {
-    switch (key) {
-        case 'up':
-            this.y -= 80;
-            this.line++;
-            break;
-            case 'down':
-            this.y += 80;
-            this.line--;
-            break;
-        case 'left':
-            this.x -= 100;
-            break;
-        case 'right':
-            this.x += 100;
-            break;
+    if (key === 'up' && this.line !== 5) {
+        this.y -= 80;
+        this.line++;
+    } else if (key === 'down' && this.line !== 0) {
+        this.y += 80;
+        this.line--;
+    } else if (key === 'left' && !(this.x <= 4)) {
+        this.x -= 100;
+    } else if (key === 'right' && !(this.x >= 404)) {
+        this.x += 100;
     }
-
-    console.log(this.line)
 }
 
 Player.prototype.collided = function() {
