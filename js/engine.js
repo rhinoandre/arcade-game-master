@@ -13,7 +13,7 @@
  * writing app.js a little simpler to work with.
  */
 
-const Engine = (function(global) {
+(function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
@@ -57,8 +57,7 @@ const Engine = (function(global) {
          */
         win.requestAnimationFrame(main);
     }
-
-    /* This function does some initial setup that should only occur once,
+/* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
      * game loop.
      */
@@ -79,7 +78,7 @@ const Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -92,6 +91,44 @@ const Engine = (function(global) {
     function updateEntities(dt) {
         allEnemies.forEach(enemy => enemy.update(dt));
         player.update();
+    }
+    /*
+    * This is called by the update function and loops through all
+    * objects and check if they are have the same coordinates.
+    * If so it means they have colide so the player should lose a life
+    * and be reseted
+    */
+    let width = 100;
+    function checkCollisions() {
+        const playerX = player.x;
+        const playerArea = playerX + width;
+
+        /**
+         * The FIRST line checks if the player is before and above the enemy
+         * The SECOND line checks if the player is after and above the enemy
+         * The THIRD line checks if the player is on the same line
+         * 
+         * So the first or the second line must be true and the third
+         */
+        if(allEnemies.some((enemy) =>
+            (
+                (playerX < enemy.x && playerArea > enemy.x && playerArea < (enemy.x + width)) ||
+                (playerX > enemy.x && playerArea > (enemy.x + width) && playerX < (enemy.x + width))
+            ) && (player.line === enemy.line)
+            )) {
+            player.collided();
+        }
+    }
+
+    /* It will call renderScenario the renderEntities function.
+     * Remember, this function is called every
+     * game tick (or loop of the game engine) because that's how games work -
+     * they are flipbooks creating the illusion of animation but in reality
+     * they are just drawing the entire screen over and over.
+     */
+    function render() {
+        renderScenario();
+        renderEntities();
     }
 
     /*
@@ -135,17 +172,6 @@ const Engine = (function(global) {
         }
     }
 
-    /* It will call renderScenario the renderEntities function.
-     * Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
-     */
-    function render() {
-        renderScenario();
-        renderEntities();
-    }
-
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
@@ -155,7 +181,6 @@ const Engine = (function(global) {
          * the render function you have defined.
          */
         allEnemies.forEach(enemy => enemy.render());
-
         player.render();
     }
 

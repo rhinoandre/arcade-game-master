@@ -1,41 +1,48 @@
 // Enemies our player must avoid
-var Enemy = function(y) {
-    const bugSize = 171;
-    this.x = ~bugSize; //~ operator do (n+1)*-1
-    this.y = y;
-    this.speed = newSpeed();
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-};
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.x += this.speed * dt;
-    if (isBugReachFinal(this.x)) {
-        this.x = -170;
+var Enemy = (function() {
+    
+    function Enemy(y, line) {
+        this.bugSize = 171;
+        this.x = ~this.bugSize; //~ operator do (n+1)*-1
+        this.y = y;
+        this.line = line;
         this.speed = newSpeed();
-    }
+        // Variables applied to each of our instances go here,
+        // we've provided one for you to get started
+
+        // The image/sprite for our enemies, this uses
+        // a helper we've provided to easily load images
+        this.sprite = 'images/enemy-bug.png';
+    };
+    // Update the enemy's position, required method for game
+    // Parameter: dt, a time delta between ticks
+    Enemy.prototype.update = function(dt) {
+        // You should multiply any movement by the dt parameter
+        // which will ensure the game runs at the same speed for
+        // all computers.
+        this.x += this.speed * dt;
+        if (isBugReachFinal(this.x)) {
+            this.x = ~this.bugSize;
+            this.speed = newSpeed();
+        }
+    };
 
     function newSpeed() {
         return Math.random() * 200 + 100;
     }
-    
+
     function isBugReachFinal(x) {
         return x > 505
     }
-};
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+    // Draw the enemy on the screen, required method for game
+    Enemy.prototype.render = function() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    return Enemy;
+})();
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -43,7 +50,8 @@ Enemy.prototype.render = function() {
 
 const Player = function() {
     this.x = 204;
-    this.y = 300;
+    this.y = 380;
+    this.line = 0;
     this.sprite = 'images/char-horn-girl.png';
 }
 // I actually don't have a clu what this method is for
@@ -57,9 +65,11 @@ Player.prototype.handleInput = function(key) {
     switch (key) {
         case 'up':
             this.y -= 80;
+            this.line++;
             break;
-        case 'down':
+            case 'down':
             this.y += 80;
+            this.line--;
             break;
         case 'left':
             this.x -= 100;
@@ -68,22 +78,28 @@ Player.prototype.handleInput = function(key) {
             this.x += 100;
             break;
     }
+
+    console.log(this.line)
 }
 
-const player = new Player();
-const allEnemies = [
-    new Enemy(60),
-    new Enemy(60),
-    new Enemy(143),
-    new Enemy(143),
-    new Enemy(225),
-    new Enemy(225)
-];
+Player.prototype.collided = function() {
+    this.x = 204;
+    this.y = 380;
+    this.line = 0;
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
-
+const player = new Player();
+const allEnemies = [
+    // new Enemy(60, 4),
+    // new Enemy(60, 4),
+    // new Enemy(143, 3),
+    // new Enemy(143, 3),
+    // new Enemy(225, 2),
+    new Enemy(225, 2)
+];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
