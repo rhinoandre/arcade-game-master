@@ -21,7 +21,7 @@
     const doc = global.document;
     const win = global.window;
     const canvas = doc.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvasContext = canvas.getContext('2d');
     let lastTime;
 
     canvas.width = 505;
@@ -153,7 +153,7 @@
         let col;
         
         // Before drawing, clear existing canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -168,7 +168,7 @@
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                canvasContext.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
     }
@@ -181,8 +181,8 @@
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(enemy => enemy.render());
-        player.render();
+        allEnemies.forEach(enemy => enemy.render(canvasContext));
+        player.render(canvasContext);
     }
 
     /* This function does nothing but it could have been a good place to
@@ -211,5 +211,5 @@
      * object when run in a browser) so that developers can use it more easily
      * from within their app.js files.
      */
-    global.ctx = ctx;
+    // global.ctx = ctx;
 })(this);

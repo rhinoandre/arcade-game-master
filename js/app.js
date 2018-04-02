@@ -1,6 +1,6 @@
 // Enemies our player must avoid
-var Enemy = (function() {
-    
+const Enemy = (function () {
+
     function Enemy(y, line) {
         this.bugSize = 171;
         this.x = ~this.bugSize; //~ operator do (n+1)*-1
@@ -16,7 +16,7 @@ var Enemy = (function() {
     };
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
-    Enemy.prototype.update = function(dt) {
+    Enemy.prototype.update = function (dt) {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
@@ -36,8 +36,8 @@ var Enemy = (function() {
     }
 
     // Draw the enemy on the screen, required method for game
-    Enemy.prototype.render = function() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    Enemy.prototype.render = function (canvasContext) {
+        canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     return Enemy;
@@ -48,55 +48,60 @@ var Enemy = (function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
-const Player = function() {
-    this.x = 204;
-    this.y = 380;
-    this.line = 0;
-    this.sprite = 'images/char-horn-girl.png';
-}
-// I actually don't have a clu what this method is for
-Player.prototype.update = function() {}
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
-Player.prototype.handleInput = function(key) {
-    if (key === 'up' && this.line !== 5) {
-        this.y -= 80;
-        this.line++;
-    } else if (key === 'down' && this.line !== 0) {
-        this.y += 80;
-        this.line--;
-    } else if (key === 'left' && !(this.x <= 4)) {
-        this.x -= 100;
-    } else if (key === 'right' && !(this.x >= 404)) {
-        this.x += 100;
+const Player = (function () {
+    function Player() {
+        this.x = 204;
+        this.y = 380;
+        this.line = 0;
+        this.sprite = 'images/char-horn-girl.png';
     }
-}
 
-Player.prototype.collided = function() {
-    this.x = 204;
-    this.y = 380;
-    this.line = 0;
-}
+    // I actually don't have a clu what this method is for
+    Player.prototype.update = function () { }
+
+    Player.prototype.render = function (canvasContext) {
+        canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    Player.prototype.handleInput = function (key) {
+        if (key === 'up' && this.line !== 5) {
+            this.y -= 80;
+            this.line++;
+        } else if (key === 'down' && this.line !== 0) {
+            this.y += 80;
+            this.line--;
+        } else if (key === 'left' && !(this.x <= 4)) {
+            this.x -= 100;
+        } else if (key === 'right' && !(this.x >= 404)) {
+            this.x += 100;
+        }
+    }
+
+    Player.prototype.collided = function () {
+        this.x = 204;
+        this.y = 380;
+        this.line = 0;
+    }
+
+    return Player;
+})();
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 const player = new Player();
 const allEnemies = [
-    // new Enemy(60, 4),
-    // new Enemy(60, 4),
-    // new Enemy(143, 3),
-    // new Enemy(143, 3),
-    // new Enemy(225, 2),
+    new Enemy(60, 4),
+    new Enemy(60, 4),
+    new Enemy(143, 3),
+    new Enemy(143, 3),
+    new Enemy(225, 2),
     new Enemy(225, 2)
 ];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keyup', function (e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
