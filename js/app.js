@@ -53,6 +53,9 @@ const Player = (function () {
         this.x = 204;
         this.y = 380;
         this.line = 0;
+        this.points = 0;
+        this.multiplier = 1;
+        this.collided = false;
         this.sprite = 'images/char-horn-girl.png';
     }
 
@@ -61,12 +64,15 @@ const Player = (function () {
 
     Player.prototype.render = function (canvasContext) {
         canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
+        canvasContext.fillText(`Points: ${this.points}`, 0, 20);
+        canvasContext.fillText(`Multiplier: x${this.multiplier}`, 0, 40);
     }
 
     Player.prototype.handleInput = function (key) {
         if (key === 'up' && this.line !== 5) {
             this.y -= 80;
             this.line++;
+            handlePoints(this);
         } else if (key === 'down' && this.line !== 0) {
             this.y += 80;
             this.line--;
@@ -77,10 +83,38 @@ const Player = (function () {
         }
     }
 
-    Player.prototype.collided = function () {
+    // Apply the penalities for collision
+    Player.prototype.handleCollision = function () {
+        // Decrease the points * 2
+        player.points -= 40;
+        if (player.points < 0) {
+            player.points = 0;
+        }
+        // Restart the multiplier
+        player.multiplier = 1;
+        player.reset();
+    }
+
+    // Reset all Player attributes
+    Player.prototype.reset = function () {
         this.x = 204;
         this.y = 380;
         this.line = 0;
+        this.collided = false;
+    }
+
+    /**
+     * Private functions
+     */
+    function handlePoints(player) {
+        if (player.line === 5) { // Player wins
+            // Increase the points
+            player.points += 20 * player.multiplier;
+            // Increase the multiplier
+            player.multiplier++;
+            // Reset the game after 1s
+            setTimeout(() => player.reset(), 1000);
+        }
     }
 
     return Player;

@@ -23,9 +23,10 @@
     const canvas = doc.createElement('canvas');
     const canvasContext = canvas.getContext('2d');
     let lastTime;
-
+    
     canvas.width = 505;
     canvas.height = 606;
+    canvasContext.font = "20px Georgia";
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -99,8 +100,8 @@
     * If so it means they have colide so the player should lose a life
     * and be reseted
     */
-    let width = 80;
-    function checkCollisions() {
+   function checkCollisions() {
+        const width = 80;
         const playerX = player.x;
         const playerArea = playerX + width;
 
@@ -117,7 +118,7 @@
                 (playerX > enemy.x && playerArea > (enemy.x + width) && playerX < (enemy.x + width))
             ) && (player.line === enemy.line)
             )) {
-            player.collided();
+            player.handleCollision();
         }
     }
 
