@@ -55,7 +55,6 @@ const Player = (function () {
         this.line = 0;
         this.points = 0;
         this.multiplier = 1;
-        this.collided = false;
         this.sprite = 'images/char-horn-girl.png';
     }
 
@@ -86,13 +85,13 @@ const Player = (function () {
     // Apply the penalities for collision
     Player.prototype.handleCollision = function () {
         // Decrease the points * 2
-        player.points -= 40;
-        if (player.points < 0) {
-            player.points = 0;
+        this.points -= 40;
+        if (this.points < 0) {
+            this.points = 0;
         }
         // Restart the multiplier
-        player.multiplier = 1;
-        player.reset();
+        this.multiplier = 1;
+        this.reset();
     }
 
     // Reset all Player attributes
