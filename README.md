@@ -10,7 +10,7 @@ Good look and have fun!
 
 # Initialization
 
-Double click on `index.html` file
+Double click on `index.html` file or [access here](https://rhinoandre.github.io/arcade-game-master/) to test it online
 
 # Specifications
 
