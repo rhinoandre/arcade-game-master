@@ -78,7 +78,7 @@
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        updateEntities(dt);
+        updateEnemies(dt);
         checkCollisions();
     }
 
@@ -89,9 +89,8 @@
      * the data/properties related to the object. Do your drawing in your
      * render methods.
      */
-    function updateEntities(dt) {
+    function updateEnemies(dt) {
         allEnemies.forEach(enemy => enemy.update(dt));
-        player.update();
     }
 
     /*

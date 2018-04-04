@@ -63,9 +63,6 @@ const Player = (function () {
         this.sprite = 'images/char-horn-girl.png';
     }
 
-    // I actually don't have a clu what this method is for
-    Player.prototype.update = function () { }
-
     Player.prototype.render = function (canvasContext) {
         canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
         canvasContext.fillText(`Points: ${this.points}`, 0, 20);
