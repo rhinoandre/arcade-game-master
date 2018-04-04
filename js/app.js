@@ -1,9 +1,8 @@
 // Enemies our player must avoid
 const Enemy = (function () {
-
     function Enemy(y, line) {
         this.bugSize = 171;
-        this.x = ~this.bugSize; //~ operator do (n+1)*-1
+        this.x = ~this.bugSize; // ~ operator do (n+1)*-1
         this.y = y;
         this.line = line;
         this.speed = newSpeed();
@@ -14,6 +13,7 @@ const Enemy = (function () {
         // a helper we've provided to easily load images
         this.sprite = 'images/enemy-bug.png';
     };
+
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
     Enemy.prototype.update = function (dt) {
@@ -27,17 +27,22 @@ const Enemy = (function () {
         }
     };
 
+    
+    // Draw the enemy on the screen, required method for game
+    Enemy.prototype.render = function (canvasContext) {
+        canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    /**
+     * Private functions
+     * This function should only be accessed inside the IIFE
+     */
     function newSpeed() {
         return Math.random() * 200 + 100;
     }
 
     function isBugReachFinal(x) {
         return x > 505
-    }
-
-    // Draw the enemy on the screen, required method for game
-    Enemy.prototype.render = function (canvasContext) {
-        canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     return Enemy;
@@ -104,15 +109,16 @@ const Player = (function () {
 
     /**
      * Private functions
+     * This function should only be accessed inside the IIFE
      */
-    function handlePoints(player) {
-        if (player.line === 5) { // Player wins
+    function handlePoints(p) {
+        if (p.line === 5) { // Player wins
             // Increase the points
-            player.points += 20 * player.multiplier;
+            p.points += 20 * p.multiplier;
             // Increase the multiplier
-            player.multiplier++;
+            p.multiplier++;
             // Reset the game after 1s
-            setTimeout(() => player.reset(), 1000);
+            setTimeout(() => p.reset(), 1000);
         }
     }
 
