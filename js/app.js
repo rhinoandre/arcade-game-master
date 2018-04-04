@@ -1,8 +1,10 @@
+'use strict';
+
 // Enemies our player must avoid
 const Enemy = (function () {
     function Enemy(y, line) {
-        this.bugSize = 171;
-        this.x = ~this.bugSize; // ~ operator do (n+1)*-1
+        this.startPosition = -172;
+        this.x = this.startPosition;
         this.y = y;
         this.line = line;
         this.speed = newSpeed();
@@ -12,7 +14,7 @@ const Enemy = (function () {
         // The image/sprite for our enemies, this uses
         // a helper we've provided to easily load images
         this.sprite = 'images/enemy-bug.png';
-    };
+    }
 
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -22,7 +24,7 @@ const Enemy = (function () {
         // all computers.
         this.x += this.speed * dt;
         if (isBugReachFinal(this.x)) {
-            this.x = ~this.bugSize;
+            this.x = this.startPosition;
             this.speed = newSpeed();
         }
     };
@@ -31,7 +33,7 @@ const Enemy = (function () {
     // Draw the enemy on the screen, required method for game
     Enemy.prototype.render = function (canvasContext) {
         canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
+    };
 
     /**
      * Private functions
@@ -42,7 +44,7 @@ const Enemy = (function () {
     }
 
     function isBugReachFinal(x) {
-        return x > 505
+        return x > 505;
     }
 
     return Enemy;
@@ -52,7 +54,6 @@ const Enemy = (function () {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-
 const Player = (function () {
     function Player() {
         this.x = 204;
@@ -67,7 +68,7 @@ const Player = (function () {
         canvasContext.drawImage(Resources.get(this.sprite), this.x, this.y);
         canvasContext.fillText(`Points: ${this.points}`, 0, 20);
         canvasContext.fillText(`Multiplier: x${this.multiplier}`, 0, 40);
-    }
+    };
 
     Player.prototype.handleInput = function (key) {
         if (key === 'up' && this.line !== 5) {
@@ -77,12 +78,12 @@ const Player = (function () {
         } else if (key === 'down' && this.line !== 0) {
             this.y += 80;
             this.line--;
-        } else if (key === 'left' && !(this.x <= 4)) {
+        } else if (key === 'left' && this.x > 4) {
             this.x -= 100;
-        } else if (key === 'right' && !(this.x >= 404)) {
+        } else if (key === 'right' && this.x < 404) {
             this.x += 100;
         }
-    }
+    };
 
     // Apply the penalities for collision
     Player.prototype.handleCollision = function () {
@@ -94,7 +95,7 @@ const Player = (function () {
         // Restart the multiplier
         this.multiplier = 1;
         this.reset();
-    }
+    };
 
     // Reset all Player attributes
     Player.prototype.reset = function () {
@@ -102,7 +103,7 @@ const Player = (function () {
         this.y = 380;
         this.line = 0;
         this.collided = false;
-    }
+    };
 
     /**
      * Private functions
